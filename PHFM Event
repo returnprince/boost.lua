@@ -1,0 +1,102 @@
+-- Inicializa a biblioteca Rayfield
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+-- Cria a janela principal do Script
+local Window = Rayfield:CreateWindow({
+   Name = "Teleport Tool | Rayfield UI",
+   LoadingTitle = "Carregando...",
+   LoadingSubtitle = "Por favor, aguarde",
+   ConfigurationSaving = {
+      Enabled = false
+   },
+   Discord = {
+      Enabled = false
+   },
+   KeySystem = false
+})
+
+-- Cria a aba principal
+local MainTab = Window:CreateTab("Teleporte", 4483362458) -- Ícone padrão
+
+-- Variáveis começam com as coordenadas padrão pré-prontas
+local targetX, targetY, targetZ = 93, 18, -1742
+
+-- 1. Seção do Centro Superior: Mostrar Localização Exata (X, Y, Z)
+local LabelCoordenadas = MainTab:CreateLabel("Sua Posição: X: 0 | Y: 0 | Z: 0")
+
+-- Atualiza a posição em tempo real no Label
+task.spawn(function()
+    while task.wait(0.1) do
+        local player = game.Players.LocalPlayer
+        if player and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+            local pos = player.Character.HumanoidRootPart.Position
+            -- Atualiza o texto formatado com 2 casas decimais para não ficar gigante
+            LabelCoordenadas:Set(string.format("Sua Posição: X: %.2f | Y: %.2f | Z: %.2f", pos.X, pos.Y, pos.Z))
+        end
+    end
+end)
+
+-- Separador visual
+MainTab:CreateSection("Configurar Destino")
+
+-- 2. Três opções (Inputs) com Placeholder indicando o padrão
+MainTab:CreateInput({
+   Name = "Coordenada X",
+   PlaceholderText = "Padrão: 93",
+   RemoveTextAfterFocusLost = false,
+   Callback = function(Text)
+      -- Se apagar ou não for número, volta para 93
+      targetX = tonumber(Text) or 93
+   end,
+})
+
+MainTab:CreateInput({
+   Name = "Coordenada Y",
+   PlaceholderText = "Padrão: 18",
+   RemoveTextAfterFocusLost = false,
+   Callback = function(Text)
+      -- Se apagar ou não for número, volta para 18
+      targetY = tonumber(Text) or 18
+   end,
+})
+
+MainTab:CreateInput({
+   Name = "Coordenada Z",
+   PlaceholderText = "Padrão: -1742",
+   RemoveTextAfterFocusLost = false,
+   Callback = function(Text)
+      -- Se apagar ou não for número, volta para -1742
+      targetZ = tonumber(Text) or -1742
+   end,
+})
+
+-- Separador visual
+MainTab:CreateSection("Ação")
+
+-- 3. Botão de clique único para teletransportar
+MainTab:CreateButton({
+   Name = "Teleportar para as Coordenadas",
+   Callback = function()
+      local player = game.Players.LocalPlayer
+      if player and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+         -- Altera a CFrame do jogador para as coordenadas digitadas ou padrões
+         player.Character.HumanoidRootPart.CFrame = CFrame.new(targetX, targetY, targetZ)
+         
+         -- Notificação de sucesso
+         Rayfield:Notify({
+            Title = "Teleporte Realizado!",
+            Content = string.format("Você foi para: X: %s | Y: %s | Z: %s", targetX, targetY, targetZ),
+            Duration = 3,
+            Image = 4483362458,
+         })
+      else
+         -- Notificação de erro caso o personagem não seja encontrado
+         Rayfield:Notify({
+            Title = "Erro",
+            Content = "Não foi possível encontrar o seu personagem.",
+            Duration = 3,
+            Image = 4483362458,
+         })
+      end
+   end,
+})
