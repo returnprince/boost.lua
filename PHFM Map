@@ -1,0 +1,79 @@
+local TeleportService = game:GetService("TeleportService")
+local player = game.Players.LocalPlayer
+
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+   Name = "🔥 Protect House From Monsters - MAPS 🔥",
+   LoadingTitle = "Loading...",
+   LoadingSubtitle = "byDevDrigo",
+   ConfigurationSaving = { Enabled = false }
+})
+
+local Tab = Window:CreateTab("Teleportes Principais", 4483362458)
+
+-- Função segura de teleporte
+local function teleportTo(placeId)
+    if placeId == 0 then
+        Rayfield:Notify({
+           Title = "ID Faltando!",
+           Content = "Este botão está sem ID configurado.",
+           Duration = 3,
+           Image = 4483362458,
+        })
+        return
+    end
+
+    Rayfield:Notify({
+       Title = "Teleportando...",
+       Content = "Indo para o Place ID: " .. tostring(placeId),
+       Duration = 3,
+       Image = 4483362458,
+    })
+    task.wait(0.5)
+    TeleportService:Teleport(placeId, player)
+end
+
+-- ==========================================
+-- MAPAS PRINCIPAIS (RAIZ - NUNCA EXPIRAM)
+-- ==========================================
+Tab:CreateButton({
+   Name = "🏠 LOBBY PRINCIPAL (Protect The House)",
+   Callback = function() teleportTo(115286378269814) end,
+})
+
+Tab:CreateButton({
+   Name = "🏰 WORLD 2: CASTLE",
+   Callback = function() teleportTo(129028588391526) end,
+})
+
+-- ==========================================
+-- EVENTOS DE INVERNO / BOSSES
+-- ==========================================
+Tab:CreateButton({
+   Name = "❄️ WINTER OBBY: POLAR SPRINT",
+   Callback = function() teleportTo(114735241950695) end,
+})
+
+Tab:CreateButton({
+   Name = "👹 WINTER BOSS LOBBY",
+   Callback = function() teleportTo(106560199445909) end,
+})
+
+Tab:CreateButton({
+   Name = "⚔️ WINTER BOSS (SALA DA COROA)",
+   Callback = function() teleportTo(73907331822429) end,
+})
+
+-- ==========================================
+-- MODOS DE DIFICULDADE
+-- ==========================================
+Tab:CreateButton({
+   Name = "🟢 MODE: BEGINNER",
+   Callback = function() teleportTo(95418274921805) end,
+ })
+
+Tab:CreateButton({
+   Name = "🔴 MODE: PRO",
+   Callback = function() teleportTo(122727513370912) end,
+})
